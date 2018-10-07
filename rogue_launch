@@ -1,0 +1,76 @@
+
+echo '    .___          .__.__                      '
+
+echo '    |__|____    __| _|__| ______ __________   '
+
+echo '    |  \__  \  / __ ||  |/  ___//  ___\__  \  '
+
+echo '    |  |/ __ \/ /_/ ||  |\___ \ \___ \ / __ \_'
+
+echo '/\__|  (____  \____ ||__/____  /____  (____  /'
+
+echo '\______|    \/     \/        \/     \/     \/ '
+
+#####################################################################################
+#
+#   Name:   Rogue Launch Inspection
+#
+#   Desc:   Attempts to stop, unload and remove a rogue Launch daemon from OSX
+#           Tested on macOS Mojave 10.14.1 Beta (18B50c)
+#
+#   Run:    chmod u+x rogue_launch && ./rogue_launch some_launch_name_here
+#
+#   Warn:   Running this script could damage your system!
+#           The user is not prompted for input and it is advised to read through
+#           before running
+#
+#           No warranty provided by author
+#
+#   Author: https://github.com/jadissa
+#
+#####################################################################################
+
+#
+#   Register known launch paths
+#
+registered_lanch_paths=( /System/Library/LaunchDaemons /System/Library/LaunchAgents ~/Library/LaunchAgents /Library/LaunchAgents /Library/LaunchDaemons )
+
+
+echo 'Rogue Launch Inspection'
+
+echo
+
+PROCESS_NAME=$1
+
+PROCESS_NAME=`echo -e "${PROCESS_NAME// /}"`
+
+
+#
+#   Iterate registered paths searching for process
+#
+for registered_lanch_path in "${registered_lanch_paths[@]}"; do
+
+    #
+    #   Determine offending location
+    #
+    LAUNCH_PATH=`ls -l $registered_lanch_path | grep --recursive --ignore-case --files-with-matches --with-filename $PROCESS_NAME $registered_lanch_path`
+
+
+    #
+    #   Skip empty result
+    #
+    if [ "$LAUNCH_PATH" == "" ]; then
+
+        continue
+
+    fi
+
+
+    #
+    #   Unload that shit
+    #
+    sudo launchctl stop $LAUNCH_PATH
+    sudo launchctl unload $LAUNCH_PATH
+    sudo launchctl remove $LAUNCH_PATH
+
+done
