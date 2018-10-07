@@ -1,0 +1,2 @@
+# osxcli
+macOS CLI Scripts
