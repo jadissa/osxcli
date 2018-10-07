@@ -40,26 +40,26 @@ echo 'Rogue Launch Inspection'
 
 echo
 
-PROCESS_NAME=$1
+ROGUE_LAUNCH=$1
 
-PROCESS_NAME=`echo -e "${PROCESS_NAME// /}"`
+ROGUE_LAUNCH=`echo -e "${ROGUE_LAUNCH// /}"`
 
 
 #
-#   Iterate registered paths searching for process
+#   Iterate registered paths searching for offending launch
 #
 for registered_lanch_path in "${registered_lanch_paths[@]}"; do
 
     #
     #   Determine offending location
     #
-    LAUNCH_PATH=`ls -l $registered_lanch_path | grep --recursive --ignore-case --files-with-matches --with-filename $PROCESS_NAME $registered_lanch_path`
+    OFFENDING_LAUNCH=`ls -l $registered_lanch_path | grep --recursive --ignore-case --files-with-matches --with-filename $ROGUE_LAUNCH $registered_lanch_path`
 
 
     #
     #   Skip empty result
     #
-    if [ "$LAUNCH_PATH" == "" ]; then
+    if [ "$OFFENDING_LAUNCH" == "" ]; then
 
         continue
 
@@ -69,8 +69,8 @@ for registered_lanch_path in "${registered_lanch_paths[@]}"; do
     #
     #   Unload that shit
     #
-    sudo launchctl stop $LAUNCH_PATH
-    sudo launchctl unload $LAUNCH_PATH
-    sudo launchctl remove $LAUNCH_PATH
+    sudo launchctl stop $OFFENDING_LAUNCH
+    sudo launchctl unload $OFFENDING_LAUNCH
+    sudo launchctl remove $OFFENDING_LAUNCH
 
 done
