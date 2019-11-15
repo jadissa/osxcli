@@ -1,0 +1,15 @@
+sudo systemsetup -getcomputername
+sudo systemsetup -settimezone America/Los_Angeles
+sudo systemsetup -setcomputersleep Never
+echo yes | sudo systemsetup -setremotelogin off
+sudo systemsetup -setremoteappleevents off
+sudo systemsetup -setrestartpowerfailure on
+
+sudo launchctl unload -w /System/Library/LaunchDaemons/ssh.plist 
+
+sudo apachectl stop
+sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist
+
+#ls -l /usr/local/bin/../share/nmap/scripts
+
+sudo nmap -O --script broadcast,vuln,ssh-hostkey,http-headers,reverse-index,resolveall --script-args newtargets localhost
