@@ -1,0 +1,4 @@
+sudo purge
+sudo rm -rf ~/Library/Cookies/*
+sudo rm -rf ~/Library/Caches/*
+sudo rm -rf /Library/Caches/*

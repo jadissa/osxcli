@@ -14,4 +14,5 @@ sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist
 #ls -l /usr/local/bin/../share/nmap/scripts
 
 #scans
+curl ipinfo.io localhost
 sudo nmap -O --script broadcast,vuln,ssh-hostkey,http-headers,reverse-index,resolveall --script-args newtargets localhost
